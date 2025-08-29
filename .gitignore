@@ -1,0 +1,58 @@
+# ─── Python ─────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Виртуальное окружение
+venv/
+env/
+.venv/
+
+# Логи
+*.log
+*.out
+*.err
+
+# Конфиги и ключи
+*.env
+.env.*
+secrets.json
+config.json
+
+# Кэш и временные файлы
+*.sqlite3
+*.db
+*.db-journal
+*.sqlite
+*.pid
+*.swp
+.DS_Store
+Thumbs.db
+
+# Jupyter / IPython
+.ipynb_checkpoints/
+*.ipynb
+
+# Компилятор / C расширения
+*.so
+
+# Тесты
+.coverage
+.tox/
+.pytest_cache/
+htmlcov/
+
+# IDE и редакторы
+.vscode/
+.idea/
+*.iml
+
+# ─── Aiogram ────────────────────────────
+# (часто хранится база или токены)
+*.session
+*.session-journal
+
+# Telegram Bot
+*.session*
+*.db-shm
+*.db-wal

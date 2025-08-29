@@ -121,3 +121,74 @@ def get_news_count():
     count = cursor.fetchone()[0]
     conn.close()
     return count
+
+# DB/manageDB.py
+def get_news_by_source(source_name):
+    """Получить новости по конкретному источнику"""
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            SELECT category, date, ist, link, short_text, content 
+            FROM EasyNews 
+            WHERE LOWER(ist) LIKE ? 
+            ORDER BY created_at DESC
+        ''', (f"%{source_name.lower()}%",))
+        
+        rows = cursor.fetchall()
+        conn.close()
+        
+        news_list = []
+        for item in rows:
+            news_list.append({
+                'category': item[0],
+                'date': item[1],
+                'ist': item[2],
+                'link': item[3],
+                'short_text': item[4],
+                'content': item[5]
+            })
+        
+        return news_list
+        
+    except sqlite3.Error as e:
+        print(f"Ошибка при получении новостей по источнику: {e}")
+        return []
+
+
+
+def search_news_by_keyword(keyword, limit=10, offset=0):
+    """Поиск новостей по ключевым словам (в short_text и content)"""
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        query = f"""
+            SELECT category, date, ist, link, short_text, content
+            FROM EasyNews
+            WHERE LOWER(short_text) LIKE ? OR LOWER(content) LIKE ?
+            ORDER BY created_at DESC
+            LIMIT ? OFFSET ?
+        """
+        params = (f"%{keyword.lower()}%", f"%{keyword.lower()}%", limit, offset)
+        cursor.execute(query, params)
+        
+        rows = cursor.fetchall()
+        conn.close()
+        
+        news_list = []
+        for item in rows:
+            news_list.append({
+                'category': item[0],
+                'date': item[1],
+                'ist': item[2],
+                'link': item[3],
+                'short_text': item[4],
+                'content': item[5]
+            })
+        
+        return news_list
+    except sqlite3.Error as e:
+        print(f"Ошибка при поиске новостей по ключевым словам: {e}")
+        return []
